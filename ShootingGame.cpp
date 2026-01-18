@@ -5,6 +5,7 @@
 #include <ctime>
 #include <sstream>
 using namespace sf;
+using namespace std;
 
 const int WIDTH = 1200;
 const int HEIGHT = 800;
@@ -34,8 +35,8 @@ float invincibleTimer = 0;
 GameState state = MENU;
 
 Vector2f playerPos;
-std::vector<Bullet> bullets;
-std::vector<Enemy> enemies;
+vector<Bullet> bullets;
+vector<Enemy> enemies;
 
 void createBullet(float x, float y, bool fromEnemy) {
     Bullet b;
@@ -233,7 +234,7 @@ int main() {
                 }
             }
 
-            std::ostringstream ss;
+            ostringstream ss;
             ss << "Score: " << score;
             scoreText.setString(ss.str());
             ss.str("");
@@ -289,7 +290,7 @@ int main() {
             Text scoreDisplay;
             scoreDisplay.setFont(font);
             scoreDisplay.setCharacterSize(32);
-            std::ostringstream ss;
+            ostringstream ss;
             ss << "Final Score: " << score << "\nPress R to Menu";
             scoreDisplay.setString(ss.str());
             scoreDisplay.setPosition(WIDTH / 2 - 150, HEIGHT / 2);

@@ -1,0 +1,3 @@
+/home/nazmul-hassan/PROJECT150/build/CMakeFiles/MyGame.dir
+/home/nazmul-hassan/PROJECT150/build/CMakeFiles/edit_cache.dir
+/home/nazmul-hassan/PROJECT150/build/CMakeFiles/rebuild_cache.dir

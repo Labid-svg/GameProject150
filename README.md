@@ -1,303 +1,62 @@
-#include <SFML/Graphics.hpp>
-#include <vector>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <sstream>
-using namespace sf;
+Space Combat Game (SFML + C++)
 
-const int WIDTH = 1200;
-const int HEIGHT = 800;
+A 2D Space Shooting Game built with C++ and SFML
 
-enum GameState { MENU, PLAYING, GAME_OVER };
+Space Combat is a real-time 2D arcade-style space shooter where the player controls a spaceship, shoots incoming enemies, dodges enemy fire, and progresses through increasingly challenging levels.
+This project demonstrates core game development fundamentals using C++ and SFML, including game loops, collision detection, state management, and rendering.
 
-struct Bullet {
-    RectangleShape shape;
-    bool active;
-    bool fromEnemy;
-};
+◼️ Gameplay Features
 
-struct Enemy {
-    CircleShape shape;
-    RectangleShape healthBar;
-    float health;
-    bool active;
-};
+• Player-controlled spaceship with smooth movement
+• Bullet shooting system (player & enemies)
+• Enemy spawning with increasing difficulty
+• Enemy health bars
+• Score, lives, and level system
+• Temporary invincibility after taking damage
+• Menu, gameplay, and game-over states
+• Simple HUD (score, lives, level)
+• Cross-platform font loading (Linux / Windows)
 
-int score = 0;
-int lives = 3;
-int level = 1;
-int enemiesKilled = 0;
-float shootTimer = 0;
-float spawnTimer = 0;
-float invincibleTimer = 0;
-GameState state = MENU;
+◼️ Controls
 
-Vector2f playerPos;
-std::vector<Bullet> bullets;
-std::vector<Enemy> enemies;
+• Key	Action
+• Arrow Keys - Move player
+• Space	- Shoot/Start game
+• R	- Restart after Game Over
+• Esc -	Exit game
 
-void createBullet(float x, float y, bool fromEnemy) {
-    Bullet b;
-    b.shape.setSize(Vector2f(5, 15));
-    b.shape.setFillColor(fromEnemy ? Color::Red : Color::Yellow);
-    b.shape.setPosition(x, y);
-    b.active = true;
-    b.fromEnemy = fromEnemy;
-    bullets.push_back(b);
-}
+◼️ Project Structure (Key Components)
 
-void createEnemy() {
-    Enemy e;
-    e.shape.setRadius(20);
-    e.shape.setFillColor(Color(200, 0, 0));
-    e.shape.setPosition(rand() % (WIDTH - 40), -40);
-    e.healthBar.setSize(Vector2f(40, 4));
-    e.healthBar.setFillColor(Color::Green);
-    e.health = level;
-    e.active = true;
-    enemies.push_back(e);
-}
+• Bullet and Enemy structs
+• Game state management (MENU, PLAYING, GAME_OVER)
+• Separate logic for:
+• Input handling
+• Enemy spawning
+• Shooting mechanics
+• Collision detection
+• Rendering & HUD updates
 
-void resetGame() {
-    playerPos = Vector2f(WIDTH / 2, HEIGHT - 80);
-    bullets.clear();
-    enemies.clear();
-    score = 0;
-    lives = 3;
-    level = 1;
-    enemiesKilled = 0;
-    shootTimer = 0;
-    spawnTimer = 0;
-    invincibleTimer = 0;
-}
+◼️ Technical Highlights
 
-int main() {
-    srand(time(0));
-    RenderWindow window(VideoMode(WIDTH, HEIGHT), "Space Combat");
-    window.setFramerateLimit(60);
+• C++17
+• SFML (Graphics, Window, System)
+• Object-oriented design using structs
+• Delta-time based movement
+• Collision detection:
+•Bounding box checks
+• Distance-based collision
+• Efficient game loop with frame limiting
 
-    RectangleShape player(Vector2f(40, 40));
-    player.setFillColor(Color::Green);
-    player.setOrigin(20, 20);
-    resetGame();
+◼️ Built With
 
-    Font font;
-    font.loadFromFile("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf");
-    if (!font.getInfo().family.empty()) {}
-    else font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf");
+• Language: C++
+• Library: SFML (Simple and Fast Multimedia Library)
+• Platform: Linux / Windows
 
-    Text scoreText, livesText, levelText;
-    scoreText.setFont(font);
-    scoreText.setCharacterSize(24);
-    scoreText.setPosition(10, 10);
-    livesText.setFont(font);
-    livesText.setCharacterSize(24);
-    livesText.setPosition(10, 40);
-    levelText.setFont(font);
-    levelText.setCharacterSize(24);
-    levelText.setPosition(10, 70);
+◼️ Game Preview
+<img width="1194" height="833" alt="Screenshot from 2026-01-18 08-51-24" src="https://github.com/user-attachments/assets/7985e527-b377-4663-8d36-2a3f59cfd4ba" />
+<img width="1194" height="833" alt="Screenshot from 2026-01-18 08-51-11" src="https://github.com/user-attachments/assets/3dda8467-b4b0-4acb-ac8e-3a0a06b7cf69" />
+<img width="1194" height="833" alt="Screenshot from 2026-01-18 08-51-00" src="https://github.com/user-attachments/assets/be0e01ff-f195-4259-8156-8e8bafb3f72f" />
 
-    Text titleText;
-    titleText.setFont(font);
-    titleText.setCharacterSize(72);
-    titleText.setFillColor(Color::Cyan);
-    titleText.setString("SPACE COMBAT");
-    titleText.setPosition(WIDTH / 2 - 300, 200);
+[Screencast from 2026-01-18 08-52-24.webm](https://github.com/user-attachments/assets/e7b716f8-c2eb-4411-bbe6-d90a0f5c7825)
 
-    Text menuText;
-    menuText.setFont(font);
-    menuText.setCharacterSize(32);
-    menuText.setString("Press SPACE to Play\nPress ESC to Exit");
-    menuText.setPosition(WIDTH / 2 - 180, 400);
-
-    Clock clock;
-
-    while (window.isOpen()) {
-        Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == Event::Closed)
-                window.close();
-        }
-
-        float dt = clock.restart().asSeconds();
-        if (dt > 0.1f) dt = 0.1f;
-
-        if (state == MENU) {
-            if (Keyboard::isKeyPressed(Keyboard::Space)) {
-                state = PLAYING;
-                resetGame();
-            }
-            if (Keyboard::isKeyPressed(Keyboard::Escape))
-                window.close();
-        }
-
-        else if (state == PLAYING) {
-            shootTimer += dt;
-            spawnTimer += dt;
-            invincibleTimer -= dt;
-
-            float speed = 300 * dt;
-            if (Keyboard::isKeyPressed(Keyboard::Left) && playerPos.x > 20)
-                playerPos.x -= speed;
-            if (Keyboard::isKeyPressed(Keyboard::Right) && playerPos.x < WIDTH - 20)
-                playerPos.x += speed;
-            if (Keyboard::isKeyPressed(Keyboard::Up) && playerPos.y > 20)
-                playerPos.y -= speed;
-            if (Keyboard::isKeyPressed(Keyboard::Down) && playerPos.y < HEIGHT - 20)
-                playerPos.y += speed;
-
-            if (Keyboard::isKeyPressed(Keyboard::Space) && shootTimer > 0.2f) {
-                createBullet(playerPos.x, playerPos.y - 30, false);
-                shootTimer = 0;
-            }
-
-            float spawnRate = 1.5f - level * 0.1f;
-            if (spawnRate < 0.5f) spawnRate = 0.5f;
-            if (spawnTimer > spawnRate) {
-                createEnemy();
-                spawnTimer = 0;
-            }
-
-            for (auto &b : bullets) {
-                if (b.active) {
-                    float speed = b.fromEnemy ? 200 : -400;
-                    b.shape.move(0, speed * dt);
-                    if (b.shape.getPosition().y < -20 || b.shape.getPosition().y > HEIGHT + 20)
-                        b.active = false;
-                }
-            }
-
-            for (auto &e : enemies) {
-                if (e.active) {
-                    e.shape.move(0, (100 + level * 10) * dt);
-                    
-                    if (rand() % 100 < 1)
-                        createBullet(e.shape.getPosition().x + 20, e.shape.getPosition().y + 20, true);
-                    
-                    if (e.shape.getPosition().y > HEIGHT + 50)
-                        e.active = false;
-                }
-            }
-
-            for (auto &b : bullets) {
-                if (!b.active || b.fromEnemy) continue;
-                for (auto &e : enemies) {
-                    if (!e.active) continue;
-                    if (b.shape.getGlobalBounds().intersects(e.shape.getGlobalBounds())) {
-                        b.active = false;
-                        e.health--;
-                        if (e.health <= 0) {
-                            e.active = false;
-                            score += 10 * level;
-                            enemiesKilled++;
-                            if (enemiesKilled >= 10) {
-                                level++;
-                                enemiesKilled = 0;
-                            }
-                        } else {
-                            e.healthBar.setSize(Vector2f(40 * e.health / level, 4));
-                        }
-                        break;
-                    }
-                }
-            }
-
-            if (invincibleTimer <= 0) {
-                for (auto &b : bullets) {
-                    if (b.active && b.fromEnemy) {
-                        float dx = playerPos.x - b.shape.getPosition().x;
-                        float dy = playerPos.y - b.shape.getPosition().y;
-                        if (sqrt(dx*dx + dy*dy) < 30) {
-                            b.active = false;
-                            lives--;
-                            invincibleTimer = 2.0f;
-                            if (lives <= 0)
-                                state = GAME_OVER;
-                        }
-                    }
-                }
-
-                for (auto &e : enemies) {
-                    if (e.active) {
-                        float dx = playerPos.x - (e.shape.getPosition().x + 20);
-                        float dy = playerPos.y - (e.shape.getPosition().y + 20);
-                        if (sqrt(dx*dx + dy*dy) < 40) {
-                            e.active = false;
-                            lives--;
-                            invincibleTimer = 2.0f;
-                            if (lives <= 0)
-                                state = GAME_OVER;
-                        }
-                    }
-                }
-            }
-
-            std::ostringstream ss;
-            ss << "Score: " << score;
-            scoreText.setString(ss.str());
-            ss.str("");
-            ss << "Lives: " << lives;
-            livesText.setString(ss.str());
-            ss.str("");
-            ss << "Level: " << level;
-            levelText.setString(ss.str());
-        }
-
-        else if (state == GAME_OVER) {
-            if (Keyboard::isKeyPressed(Keyboard::R))
-                state = MENU;
-        }
-
-        window.clear(Color::Black);
-
-        if (state == PLAYING) {
-            for (auto &b : bullets)
-                if (b.active)
-                    window.draw(b.shape);
-
-            for (auto &e : enemies) {
-                if (e.active) {
-                    window.draw(e.shape);
-                    e.healthBar.setPosition(e.shape.getPosition().x, e.shape.getPosition().y - 10);
-                    window.draw(e.healthBar);
-                }
-            }
-
-            if (invincibleTimer <= 0 || (int)(invincibleTimer * 10) % 2 == 0) {
-                player.setPosition(playerPos);
-                window.draw(player);
-            }
-
-            window.draw(scoreText);
-            window.draw(livesText);
-            window.draw(levelText);
-        }
-        else if (state == MENU) {
-            window.draw(titleText);
-            window.draw(menuText);
-        }
-        else if (state == GAME_OVER) {
-            Text gameOverText;
-            gameOverText.setFont(font);
-            gameOverText.setCharacterSize(64);
-            gameOverText.setFillColor(Color::Red);
-            gameOverText.setString("GAME OVER");
-            gameOverText.setPosition(WIDTH / 2 - 200, HEIGHT / 2 - 100);
-            window.draw(gameOverText);
-
-            Text scoreDisplay;
-            scoreDisplay.setFont(font);
-            scoreDisplay.setCharacterSize(32);
-            std::ostringstream ss;
-            ss << "Final Score: " << score << "\nPress R to Menu";
-            scoreDisplay.setString(ss.str());
-            scoreDisplay.setPosition(WIDTH / 2 - 150, HEIGHT / 2);
-            window.draw(scoreDisplay);
-        }
-
-        window.display();
-    }
-
-    return 0;
-}

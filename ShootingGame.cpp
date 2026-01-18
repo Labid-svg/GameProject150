@@ -24,7 +24,6 @@ struct Enemy {
     bool active;
 };
 
-// Game variables
 int score = 0;
 int lives = 3;
 int level = 1;
@@ -78,13 +77,11 @@ int main() {
     RenderWindow window(VideoMode(WIDTH, HEIGHT), "Space Combat");
     window.setFramerateLimit(60);
 
-    // Player
     RectangleShape player(Vector2f(40, 40));
     player.setFillColor(Color::Green);
     player.setOrigin(20, 20);
     resetGame();
 
-    // Font
     Font font;
     font.loadFromFile("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf");
     if (!font.getInfo().family.empty()) {}
@@ -126,7 +123,6 @@ int main() {
         float dt = clock.restart().asSeconds();
         if (dt > 0.1f) dt = 0.1f;
 
-        // ===== MENU =====
         if (state == MENU) {
             if (Keyboard::isKeyPressed(Keyboard::Space)) {
                 state = PLAYING;
@@ -136,13 +132,11 @@ int main() {
                 window.close();
         }
 
-        // ===== PLAYING =====
         else if (state == PLAYING) {
             shootTimer += dt;
             spawnTimer += dt;
             invincibleTimer -= dt;
 
-            // Player movement
             float speed = 300 * dt;
             if (Keyboard::isKeyPressed(Keyboard::Left) && playerPos.x > 20)
                 playerPos.x -= speed;
@@ -153,13 +147,11 @@ int main() {
             if (Keyboard::isKeyPressed(Keyboard::Down) && playerPos.y < HEIGHT - 20)
                 playerPos.y += speed;
 
-            // Player shooting
             if (Keyboard::isKeyPressed(Keyboard::Space) && shootTimer > 0.2f) {
                 createBullet(playerPos.x, playerPos.y - 30, false);
                 shootTimer = 0;
             }
 
-            // Spawn enemies
             float spawnRate = 1.5f - level * 0.1f;
             if (spawnRate < 0.5f) spawnRate = 0.5f;
             if (spawnTimer > spawnRate) {
@@ -167,7 +159,6 @@ int main() {
                 spawnTimer = 0;
             }
 
-            // Update bullets
             for (auto &b : bullets) {
                 if (b.active) {
                     float speed = b.fromEnemy ? 200 : -400;
@@ -177,12 +168,10 @@ int main() {
                 }
             }
 
-            // Update enemies
             for (auto &e : enemies) {
                 if (e.active) {
                     e.shape.move(0, (100 + level * 10) * dt);
                     
-                    // Enemy shooting
                     if (rand() % 100 < 1)
                         createBullet(e.shape.getPosition().x + 20, e.shape.getPosition().y + 20, true);
                     
@@ -191,7 +180,6 @@ int main() {
                 }
             }
 
-            // Collision: Player bullets vs Enemies
             for (auto &b : bullets) {
                 if (!b.active || b.fromEnemy) continue;
                 for (auto &e : enemies) {
@@ -215,7 +203,6 @@ int main() {
                 }
             }
 
-            // Collision: Enemy bullets vs Player
             if (invincibleTimer <= 0) {
                 for (auto &b : bullets) {
                     if (b.active && b.fromEnemy) {
@@ -231,7 +218,6 @@ int main() {
                     }
                 }
 
-                // Player vs Enemies
                 for (auto &e : enemies) {
                     if (e.active) {
                         float dx = playerPos.x - (e.shape.getPosition().x + 20);
@@ -247,7 +233,6 @@ int main() {
                 }
             }
 
-            // Update HUD
             std::ostringstream ss;
             ss << "Score: " << score;
             scoreText.setString(ss.str());
@@ -259,22 +244,18 @@ int main() {
             levelText.setString(ss.str());
         }
 
-        // ===== GAME OVER =====
         else if (state == GAME_OVER) {
             if (Keyboard::isKeyPressed(Keyboard::R))
                 state = MENU;
         }
 
-        // ===== RENDERING =====
         window.clear(Color::Black);
 
         if (state == PLAYING) {
-            // Draw bullets
             for (auto &b : bullets)
                 if (b.active)
                     window.draw(b.shape);
 
-            // Draw enemies
             for (auto &e : enemies) {
                 if (e.active) {
                     window.draw(e.shape);
@@ -283,13 +264,11 @@ int main() {
                 }
             }
 
-            // Draw player (flash when invincible)
             if (invincibleTimer <= 0 || (int)(invincibleTimer * 10) % 2 == 0) {
                 player.setPosition(playerPos);
                 window.draw(player);
             }
 
-            // Draw HUD
             window.draw(scoreText);
             window.draw(livesText);
             window.draw(levelText);

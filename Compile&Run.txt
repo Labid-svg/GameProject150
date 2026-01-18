@@ -1,0 +1,6 @@
+Compile Command: g++ space_shooter.cpp -o space_shooter -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+
+Run Command: ./space_shooter
+
+
+Directory: cd /home/nazmul-hassan/PROJECT150/MyGame

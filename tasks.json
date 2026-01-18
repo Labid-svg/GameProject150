@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build SFML project",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "main.cpp",
+                "-o",
+                "MyGame",
+                "-I/home/nazmul-hassan/PROJECT150/SFML-2.6.2/include",
+                "-L/home/nazmul-hassan/PROJECT150/SFML-2.6.2/lib",
+                "-lsfml-graphics",
+                "-lsfml-window",
+                "-lsfml-system"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        }
+    ]
+}

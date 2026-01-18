@@ -5,6 +5,7 @@ A 2D Space Shooting Game built with C++ and SFML
 Space Combat is a real-time 2D arcade-style space shooter where the player controls a spaceship, shoots incoming enemies, dodges enemy fire, and progresses through increasingly challenging levels.
 This project demonstrates core game development fundamentals using C++ and SFML, including game loops, collision detection, state management, and rendering.
 
+
 ◼️ Gameplay Features
 
 • Player-controlled spaceship with smooth movement
@@ -25,6 +26,7 @@ This project demonstrates core game development fundamentals using C++ and SFML,
 
 • Cross-platform font loading (Linux / Windows)
 
+
 ◼️ Controls
 
 • Key	Action
@@ -36,6 +38,7 @@ This project demonstrates core game development fundamentals using C++ and SFML,
 • R	- Restart after Game Over
 
 • Esc -	Exit game
+
 
 ◼️ Project Structure (Key Components)
 
@@ -55,6 +58,7 @@ This project demonstrates core game development fundamentals using C++ and SFML,
 
 • Rendering & HUD updates
 
+
 ◼️ Technical Highlights
 
 • C++17
@@ -73,6 +77,7 @@ Collision detection:
 
 • Efficient game loop with frame limiting
 
+
 ◼️ Built With
 
 • Language: C++
@@ -81,6 +86,26 @@ Collision detection:
 
 • Platform: Linux / Windows
 
+
+◼️ Installation & Run
+
+• Linux
+
+sudo apt install libsfml-dev
+
+g++ main.cpp -o space_combat -lsfml-graphics -lsfml-window -lsfml-system
+./space_combat
+
+
+• Windows
+
+- Install SFML
+
+- Configure include & lib paths
+
+- Compile using MinGW or Visual Studio
+
+- Run the executable
 
 ◼️ Game Preview
 <img width="1194" height="833" alt="Screenshot from 2026-01-18 08-51-00" src="https://github.com/user-attachments/assets/be0e01ff-f195-4259-8156-8e8bafb3f72f" />

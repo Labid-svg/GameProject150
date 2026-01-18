@@ -8,50 +8,79 @@ This project demonstrates core game development fundamentals using C++ and SFML,
 ◼️ Gameplay Features
 
 • Player-controlled spaceship with smooth movement
+
 • Bullet shooting system (player & enemies)
+
 • Enemy spawning with increasing difficulty
+
 • Enemy health bars
+
 • Score, lives, and level system
+
 • Temporary invincibility after taking damage
+
 • Menu, gameplay, and game-over states
+
 • Simple HUD (score, lives, level)
+
 • Cross-platform font loading (Linux / Windows)
 
 ◼️ Controls
 
 • Key	Action
+
 • Arrow Keys - Move player
+
 • Space	- Shoot/Start game
+
 • R	- Restart after Game Over
+
 • Esc -	Exit game
 
 ◼️ Project Structure (Key Components)
 
 • Bullet and Enemy structs
+
 • Game state management (MENU, PLAYING, GAME_OVER)
-• Separate logic for:
+
+ Separate logic for:
+
 • Input handling
+
 • Enemy spawning
+
 • Shooting mechanics
+
 • Collision detection
+
 • Rendering & HUD updates
 
 ◼️ Technical Highlights
 
 • C++17
+
 • SFML (Graphics, Window, System)
+
 • Object-oriented design using structs
+
 • Delta-time based movement
-• Collision detection:
+
+Collision detection:
+
 •Bounding box checks
+
 • Distance-based collision
+
 • Efficient game loop with frame limiting
 
 ◼️ Built With
 
 • Language: C++
+
 • Library: SFML (Simple and Fast Multimedia Library)
+
 • Platform: Linux / Windows
+
 
 ◼️ Game Preview
 <img width="1194" height="833" alt="Screenshot from 2026-01-18 08-51-24" src="https://github.com/user-attachments/assets/7985e527-b377-4663-8d36-2a3f59cfd4ba" />

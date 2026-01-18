@@ -1,0 +1,14 @@
+[
+{
+  "directory": "/home/nazmul-hassan/PROJECT150/build",
+  "command": "/usr/bin/g++   -g -std=gnu++17 -o CMakeFiles/MyGame.dir/main.cpp.o -c /home/nazmul-hassan/PROJECT150/MyGame.cpp/main.cpp",
+  "file": "/home/nazmul-hassan/PROJECT150/MyGame.cpp/main.cpp",
+  "output": "CMakeFiles/MyGame.dir/main.cpp.o"
+},
+{
+  "directory": "/home/nazmul-hassan/PROJECT150/build",
+  "command": "/usr/bin/g++   -g -std=gnu++17 -o CMakeFiles/MyGame.dir/space_shooter.cpp.o -c /home/nazmul-hassan/PROJECT150/MyGame.cpp/space_shooter.cpp",
+  "file": "/home/nazmul-hassan/PROJECT150/MyGame.cpp/space_shooter.cpp",
+  "output": "CMakeFiles/MyGame.dir/space_shooter.cpp.o"
+}
+]
